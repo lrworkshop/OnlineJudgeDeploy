@@ -1,15 +1,15 @@
 version: "3"
-services:
 
+services:
   oj-redis:
-    image: docker.mirrors.ustc.edu.cn/library/redis:4.0-alpine
+    image: registry.docker-cn.com/library/redis:4.0-alpine
     container_name: oj-redis
     restart: always
     volumes:
       - $PWD/data/redis:/data
   
   oj-postgres:
-    image: docker.mirrors.ustc.edu.cn/library/postgres:10-alpine
+    image: registry.docker-cn.com/library/postgres:10-alpine
     container_name: oj-postgres
     restart: always
     volumes:
@@ -17,7 +17,7 @@ services:
     environment:
       - POSTGRES_DB=onlinejudge
       - POSTGRES_USER=onlinejudge
-      - POSTGRES_PASSWORD=onlinejudge
+      - POSTGRES_PASSWORD=lrworkshop
 
   judge-server:
     image: registry.cn-hangzhou.aliyuncs.com/onlinejudge/judge_server
@@ -40,10 +40,10 @@ services:
     environment:
       - SERVICE_URL=http://judge-server:8080
       - BACKEND_URL=http://oj-backend:8000/api/judge_server_heartbeat/
-      - TOKEN=CHANGE_THIS
+      - TOKEN=LRworkshop
   
   oj-backend:
-    image: registry.cn-hangzhou.aliyuncs.com/onlinejudge/oj_backend
+    image: lrworkshop/oj-backend
     container_name: oj-backend
     restart: always
     depends_on:
@@ -55,10 +55,10 @@ services:
     environment:
       - POSTGRES_DB=onlinejudge
       - POSTGRES_USER=onlinejudge
-      - POSTGRES_PASSWORD=onlinejudge
-      - JUDGE_SERVER_TOKEN=CHANGE_THIS
+      - POSTGRES_PASSWORD=lrworkshop
+      - JUDGE_SERVER_TOKEN=LRworkshop
       # - FORCE_HTTPS=1
       # - STATIC_CDN_HOST=cdn.oj.com
     ports:
-      - "0.0.0.0:80:8000"
-      - "0.0.0.0:443:1443"
+      - "0.0.0.0:8080:8000"
+      - "0.0.0.0:1443:1443"
